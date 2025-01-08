@@ -1,0 +1,73 @@
+https://anvio.org/tutorials/scaling-up/#part-ii-pangenomics
+### télécharger les génomes de Thermococcales complets sur NCBI
+ncbi-genome-download archaea \ 
+                     --assembly-level chromosome,complete \
+                     --genera "Thermococcus,Palaeococcus,Pyrococcus" \
+                     --metadata metadata.txt
+
+### process ces fichiers pour optenir un ficheir fasta.txt
+anvi-script-process-genbank-metadata -m metadata.txt \
+                                     -o NCBI_genomes \
+                                     --output-fasta-txt fasta.txt \
+                                     --exclude-gene-calls-from-fasta-txt
+
+
+### Config file pour donners les commandes à suivre pour le workflow pangenomique
+{
+    "fasta_txt": "fasta.txt",
+    "anvi_gen_contigs_database": {
+        "threads": 2
+    },
+    "anvi_run_hmms": {
+        "run": true,
+        "threads": 2
+    },
+    "anvi_run_kegg_kofams": {
+        "run": true,
+        "threads": 2
+    },
+    "anvi_run_ncbi_cogs": {
+        "run": true,
+        "threads": 2
+    },
+    "anvi_run_scg_taxonomy": {
+        "run": true,
+        "threads": 2
+    },
+    "anvi_script_reformat_fasta": {
+        "run": true,
+        "--simplify-names": true
+    },
+    "anvi_pan_genome": {
+        "threads": 4
+    },
+    "anvi_compute_genome_similarity": {
+        "run": true,
+        "threads": 4
+    },
+    "project_name": "Thermococcales",
+    "external_genomes": "external-genomes.txt",
+    "output_dirs": {
+        "FASTA_DIR": "01_FASTA",
+        "CONTIGS_DIR": "02_CONTIGS",
+        "PAN_DIR": "03_PAN",
+        "LOGS_DIR": "00_LOGS"
+    },
+    "max_threads": 4,
+    "config_version": "3",
+    "workflow_name": "pangenomics"
+}
+
+### faire le workflow pangénomique avec ce fichier de configuration, et juste avant, 
+### obtenir le graphique pour vérifier que toutes les étapes seront correctes
+anvi-run-workflow -w pangenomics \
+                  -c config.json \
+                  --save-workflow-graph
+
+
+anvi-run-workflow -w pangenomics \
+                  -c config.json
+
+### visualiser le pangénoooooome
+anvi-display-pan -g 03_PAN/Thermococcales-GENOMES.db \
+                 -p 03_PAN/Thermococcales-PAN.db
