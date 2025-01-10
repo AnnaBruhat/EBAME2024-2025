@@ -84,7 +84,7 @@ anvi-get-sequences-for-gene-clusters -g Thermococcales-GENOMES.db \
 anvi-gen-phylogenomic-tree -f concatenated-proteins.fa \
                            -o arbre_phylo_thermococcales.txt
 
-## Visualiser l'arbre :
+### Visualiser l'arbre :
 anvi-interactive -p phylogenomic-profile.db \
                  -t arbre_phylo_thermococcales.txt \
                  --title "Arbre phylogenomique Thermococcales" \
