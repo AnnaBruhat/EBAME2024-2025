@@ -71,3 +71,21 @@ anvi-run-workflow -w pangenomics \
 ### visualiser le pangénoooooome
 anvi-display-pan -g 03_PAN/Thermococcales-GENOMES.db \
                  -p 03_PAN/Thermococcales-PAN.db
+
+
+### faire un arbre phylogénomique 
+anvi-get-sequences-for-gene-clusters -g Thermococcales-GENOMES.db \
+                                     -p Thermococcales/Thermococcales-PAN.db \
+                                     --collection-name default \
+                                     --bin-id SCCGs_aleatoire \
+                                     --concatenate-gene-clusters \
+                                     -o concatenated-proteins.fa
+
+anvi-gen-phylogenomic-tree -f concatenated-proteins.fa \
+                           -o arbre_phylo_thermococcales.txt
+
+## Visualiser l'arbre :
+anvi-interactive -p phylogenomic-profile.db \
+                 -t arbre_phylo_thermococcales.txt \
+                 --title "Arbre phylogenomique Thermococcales" \
+                 --manual
